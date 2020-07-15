@@ -11,6 +11,11 @@ class StoreSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $stores = \App\models\Store::all();
+
+        foreach($stores as $store){
+             $store->products()->save(factory(\App\models\Product::class)->make());
+
+        }
     }
 }
