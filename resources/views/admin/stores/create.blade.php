@@ -1,3 +1,8 @@
+@extends('layouts.app')
+@section('content')
+
+
+
 <form action="{{ route('admin.stores.store') }}" method="POST">
     @csrf
     <div class="form-group">
@@ -15,3 +20,5 @@
     </div>
     <button type="submit" class="btn btn-primary">Criar loja</button>
 </form>
+@endsection
+

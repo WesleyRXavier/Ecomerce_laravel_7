@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\models\Store;
 use App\User;
+use Illuminate\Http\Request;
+
 class StoreController extends Controller
 {
     /**
@@ -15,8 +16,9 @@ class StoreController extends Controller
      */
     public function index()
     {
-         $stores = Store::paginate(10);
-         return view('admin.stores.index', compact('stores'));
+        $stores = Store::paginate(10);
+        toastr()->success('Esta e a index');
+        return view('admin.stores.index', compact('stores'));
 
     }
 
@@ -27,8 +29,8 @@ class StoreController extends Controller
      */
     public function create()
     {
-        $users = User::all(['id','name']);
-        return view('admin.stores.create', compact('users'));
+        $users = User::all(['id', 'name']);
+        session()->put('success','Item created successfully.');return view('admin.stores.create', compact('users'));
 
     }
 
@@ -42,10 +44,9 @@ class StoreController extends Controller
     {
         $data = $request->all();
         $user = User::find($data['user']);
-       $store = $user->store()->create($data);
+        $store = $user->store()->create($data);
 
-       return $store;
-
+        return $store;
 
     }
 
@@ -68,7 +69,9 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        //
+        $store = Store::find($id);
+        $users = User::all(['id', 'name']);
+        return view('admin.stores.edit', compact('store', 'users'));
     }
 
     /**
@@ -80,7 +83,9 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $store = Store::where('id', $id)->first();
+        $store->update($request->all());
+        return $store;
     }
 
     /**
@@ -91,6 +96,14 @@ class StoreController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $store = Store::where('id', $id)->first();
+        $store->products()->delete();
+
+        $store->delete();
+
+        flash('Loja deletada com sucesso')->success();
+
+         return redirect()->route('admin.stores.index');
     }
 }
