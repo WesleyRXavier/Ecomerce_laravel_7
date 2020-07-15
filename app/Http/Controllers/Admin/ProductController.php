@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\models\Store;
-use App\User;
 use Illuminate\Http\Request;
+use App\models\Product;
+use App\models\Store;
+use App\models\Category;
 
-class StoreController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +17,9 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::paginate(10);
-        toastr()->success('Esta e a index');
-        return view('admin.stores.index', compact('stores'));
+        $products = Product::paginate(10);
 
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -29,10 +29,8 @@ class StoreController extends Controller
      */
     public function create()
     {
-
-        $users = User::all(['id', 'name']);
-       return view('admin.stores.create', compact('users'));
-
+        $stores = Store::all(['id', 'name']);
+        return view('admin.products.create', compact('stores'));
     }
 
     /**
@@ -43,12 +41,7 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $user = User::find($data['user']);
-        $store = $user->store()->create($data);
-
-        return $store;
-
+        //
     }
 
     /**
@@ -70,9 +63,10 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        $store = Store::find($id);
-        $users = User::all(['id', 'name']);
-        return view('admin.stores.edit', compact('store', 'users'));
+        $product = Product::find($id);
+        $categories = Category::all(['id', 'name']);
+
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -84,9 +78,7 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $store = Store::where('id', $id)->first();
-        $store->update($request->all());
-        return $store;
+        //
     }
 
     /**
@@ -97,14 +89,13 @@ class StoreController extends Controller
      */
     public function destroy($id)
     {
+        $product = Product::where('id', $id)->first();
 
-        $store = Store::where('id', $id)->first();
-        $store->products()->delete();
 
-        $store->delete();
+        $product->delete();
 
-        flash('Loja deletada com sucesso')->success();
+        flash('Produto deletado com sucesso')->success();
 
-         return redirect()->route('admin.stores.index');
+         return redirect()->route('admin.products.index');
     }
 }

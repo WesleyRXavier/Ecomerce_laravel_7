@@ -11,6 +11,7 @@
         <input class="form-control" type="text" name="phone" placeholder="phone">
         <input class="form-control" type="text" name="mobile_phone" placeholder="mobile_phone">
         <input class="form-control" type="text" name="slug" placeholder="slug">
+        <span>@include('flash::message')</span>
         <select name="user" class="form-control form-control-lg">
             @foreach ($users as $user)
             <option value="{{ $user->id }}">{{ $user->name }}</option>
